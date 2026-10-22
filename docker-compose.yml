@@ -1,0 +1,16 @@
+services:
+  airflow:
+    build: .
+    command: standalone
+    user: "${AIRFLOW_UID:-50000}:0"
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/project/airflow/dags
+      # Développement local uniquement : pas d'écran de connexion.
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+      CDP_PROJECT_DIR: /opt/airflow/project
+      CDP_PYTHON: /home/airflow/cdp-venv/bin/python
+    volumes:
+      - ./:/opt/airflow/project

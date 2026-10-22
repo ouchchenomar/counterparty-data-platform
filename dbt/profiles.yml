@@ -1,0 +1,21 @@
+cdp:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Chemin absolu fourni par `python -m cdp.pipeline`, Airflow ou la CI ;
+      # la valeur par défaut fonctionne quand dbt est lancé depuis le dossier dbt/.
+      path: "{{ env_var('CDP_DUCKDB_PATH', '../data/warehouse/cdp.duckdb') }}"
+      threads: 4
+
+    # Version cloud (feuille de route) : BigQuery sandbox, gratuite et sans carte bancaire.
+    # 1. pip install dbt-bigquery
+    # 2. gcloud auth application-default login
+    # 3. décommenter puis lancer : dbt build --target bigquery
+    # bigquery:
+    #   type: bigquery
+    #   method: oauth
+    #   project: "{{ env_var('GCP_PROJECT_ID') }}"
+    #   dataset: cdp
+    #   location: EU
+    #   threads: 4

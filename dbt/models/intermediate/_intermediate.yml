@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: int_counterparties__matched
+    description: Fiches internes rapprochées du référentiel GLEIF par LEI.
+    columns:
+      - name: counterparty_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: int_counterparties__dq_checks
+    description: Résultat de chaque règle qualité par fiche (true = respectée). Aucune valeur NULL attendue.
+    columns:
+      - name: counterparty_id
+        data_tests: [unique, not_null]
+      - name: chk_mandatory_fields
+        data_tests: [not_null]
+      - name: chk_lei_present
+        data_tests: [not_null]
+      - name: chk_lei_format
+        data_tests: [not_null]
+      - name: chk_lei_checksum
+        data_tests: [not_null]
+      - name: chk_lei_known
+        data_tests: [not_null]
+      - name: chk_country_consistent
+        data_tests: [not_null]
+      - name: chk_not_duplicate
+        data_tests: [not_null]

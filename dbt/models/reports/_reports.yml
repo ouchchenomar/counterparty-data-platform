@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: rpt_dq_detection
+    description: >
+      Taux de détection des anomalies injectées, par type. C'est le chiffre à reporter dans
+      le README et sur le CV, mesuré sur des données dont on connaît la vérité terrain.
+    columns:
+      - name: anomaly_type
+        data_tests: [unique, not_null]
+
+  - name: rpt_dq_false_positives
+    description: Fiches signalées sans anomalie injectée (faux positifs ou défauts réels de la source).

@@ -1,0 +1,30 @@
+name: counterparty_data_platform
+version: "0.1.0"
+profile: cdp
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  counterparty_data_platform:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table
+    reports:
+      +schema: reports
+      +materialized: view
+
+seeds:
+  counterparty_data_platform:
+    +schema: reference

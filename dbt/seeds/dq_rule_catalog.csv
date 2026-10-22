@@ -1,0 +1,8 @@
+rule_name,dimension,severity,is_blocking,expected_anomaly_type,description
+chk_mandatory_fields,completude,error,true,missing_mandatory_field,"Raison sociale, ville et pays renseignés"
+chk_lei_present,completude,error,true,missing_lei,"LEI renseigné (hypothèse : obligatoire pour une contrepartie de salle des marchés)"
+chk_lei_format,validite,error,true,,"LEI au format ISO 17442 : 18 caractères alphanumériques puis 2 chiffres"
+chk_lei_checksum,validite,error,true,invalid_lei_checksum,"Clé de contrôle ISO 7064 MOD 97-10 correcte"
+chk_lei_known,coherence,error,true,lei_not_found,"LEI présent dans le référentiel GLEIF"
+chk_country_consistent,coherence,warn,false,country_mismatch,"Pays interne identique au pays du siège légal GLEIF"
+chk_not_duplicate,unicite,error,true,duplicate_record,"Une seule fiche interne par LEI"

@@ -1,0 +1,51 @@
+# Publie la documentation dbt (modèles, tests, lineage) sur GitHub Pages.
+# Prérequis : Settings > Pages > Source = « GitHub Actions ».
+name: dbt docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -e .
+
+      - name: Construire l'entrepôt sur l'échantillon puis la doc
+        run: |
+          python -m cdp.pipeline --from-sample
+          cd dbt
+          CDP_DUCKDB_PATH="$GITHUB_WORKSPACE/data/warehouse/cdp.duckdb" dbt docs generate --static
+          mkdir -p ../site && cp target/static_index.html ../site/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: dim_counterparty
+    description: >
+      Référentiel contrepartie (golden record). Une ligne par contrepartie, doublons exclus.
+      Les fiches avec une anomalie bloquante sont conservées mais marquées is_quarantined.
+    columns:
+      - name: counterparty_id
+        data_tests: [unique, not_null]
+      - name: lei
+        description: Unique quand il est renseigné (les doublons par LEI sont exclus).
+        data_tests: [unique]
+      - name: identity_source
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [GLEIF, INTERNE]
+      - name: dq_score
+        description: Part des règles respectées, entre 0 et 1.
+        data_tests: [not_null]
+      - name: is_quarantined
+        data_tests: [not_null]
+
+  - name: fct_dq_issues
+    description: Une ligne par règle qualité non respectée et par fiche.
+    columns:
+      - name: counterparty_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_internal__counterparties')
+                field: counterparty_id
+      - name: dimension
+        description: NULL si une règle chk_* n'est pas déclarée dans le catalogue.
+        data_tests: [not_null]

@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: Couche Bronze, rechargée à chaque run par src/cdp/load_raw.py à partir des fichiers.
+    tables:
+      - name: gleif_lei_records
+        description: Enregistrements LEI bruts de l'API GLEIF, un objet JSON par ligne (colonne payload).
+      - name: internal_counterparties
+        description: Extrait synthétique d'un système interne de contreparties, toutes colonnes en texte.
+      - name: anomalies_truth
+        description: Vérité terrain des anomalies injectées par le générateur synthétique.
